@@ -1,0 +1,98 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Larus.ViewModels"
+		xmlns:m="using:Larus.Models"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="Larus.Views.MainWindow"
+		Width="640"
+		Height="480"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Larus">
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<Window.DataTemplates>
+		<DataTemplate DataType="{x:Type m:FileResult}">
+			<StackPanel Orientation="Horizontal">
+				<Label Content="{Binding LineNo}" />
+				<Label Content="{Binding Match}" />
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type m:FileResults}">
+				<Grid RowDefinitions="auto,*">
+					<Label FontWeight="Bold" Grid.Row="0" Content="{Binding Filepath}" />
+					<ItemsControl Grid.Row="1" Items="{Binding Results}" />
+				</Grid>
+		</DataTemplate>
+	</Window.DataTemplates>
+
+	<Window.Styles>
+		<Style Selector="Window">
+			<Setter Property="Background" Value="#d9d9d9" />
+		</Style>
+		<Style Selector="TextBox">
+			<Setter Property="Margin" Value="0,5" />
+			<Setter Property="CornerRadius" Value="0" />
+			<Setter Property="FontFamily" Value="Consolas" />
+		</Style>
+		<Style Selector="TextBox:focus /template/ Border">
+			<Setter Property="BorderBrush" Value="#8803fc" />
+		</Style>
+		<Style Selector="Button">
+			<Setter Property="CornerRadius" Value="0" />
+			<Setter Property="Background" Value="#8803fc" />
+			<Setter Property="Foreground" Value="White" />
+		</Style>
+		<Style Selector="Button:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="#53009c" />
+			<Setter Property="TextBlock.Foreground" Value="White" />
+		</Style>
+	</Window.Styles>
+
+	<Grid RowDefinitions="auto,*" Margin="10">
+		<Grid Grid.Row="0" ColumnDefinitions="auto,*,auto" RowDefinitions="auto,auto,auto">
+			<!-- row 0 -->
+			<Label Grid.Column="0" Margin="0,8" HorizontalAlignment="Right">Directory</Label>
+			<TextBox
+				Text="{Binding Dir}"
+				Grid.Column="1"
+				Watermark="Base directory to search"
+				SelectionBrush="#8803fc"
+				SelectionForegroundBrush="White"
+			/>
+			<Button Grid.Column="2" Grid.Row="0" Click="BrowseDir">Choose</Button>
+
+			<!-- row 1 -->
+			<Label Grid.Column="0" Grid.Row="1" Margin="0,8" HorizontalAlignment="Right">Files</Label>
+			<TextBox
+				Text="{Binding Files}"
+				Grid.Column="1"
+				Grid.Row="1"
+				Grid.ColumnSpan="2"
+				Watermark="File patterns to search"
+				SelectionBrush="#8803fc"
+				SelectionForegroundBrush="White"
+			/>
+
+			<!-- row 2 -->
+			<Label Grid.Column="0" Grid.Row="2" Margin="0,8" HorizontalAlignment="Right">Pattern</Label>
+			<TextBox
+				Text="{Binding Pattern}"
+				Grid.Column="1"
+				Grid.Row="2"
+				Grid.ColumnSpan="2"
+				Watermark="Pattern to search for"
+				SelectionBrush="#8803fc"
+				SelectionForegroundBrush="White"
+			/>
+		</Grid>
+
+		<ScrollViewer Background="White" IsVisible="{Binding ResultsEnabled}" Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+			<ItemsControl Items="{Binding SearchResults}" />
+		</ScrollViewer>
+	</Grid>
+</Window>
